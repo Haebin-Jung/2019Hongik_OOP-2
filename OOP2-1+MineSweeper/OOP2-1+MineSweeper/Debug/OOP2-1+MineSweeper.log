@@ -1,0 +1,4 @@
+﻿  OOP2-1+MineSweeper.cpp
+c:\users\user\source\repos\oop2-1+minesweeper\oop2-1+minesweeper\oop2-1+minesweeper.cpp(123): warning C4101: 'tmpY' :참조되지 않은 지역 변수입니다.
+c:\users\user\source\repos\oop2-1+minesweeper\oop2-1+minesweeper\oop2-1+minesweeper.cpp(123): warning C4101: 'tmpX' :참조되지 않은 지역 변수입니다.
+  OOP2-1+MineSweeper.vcxproj -> C:\Users\USER\source\repos\OOP2-1+MineSweeper\Debug\OOP2-1+MineSweeper.exe
