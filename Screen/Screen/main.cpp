@@ -10,6 +10,7 @@
 #include <utility>
 #include <algorithm>
 #include "Utils.h"
+#include <ctime>
 
 using namespace std;
 
@@ -144,7 +145,7 @@ class Item : public Text {
 	char* buf;
 
 public:
-	Item(const Position& pos, int total = 0) : Text("Left Items:     ", pos), items(total) {
+	Item(const Position& pos, int total = 0) : Text("Remaining Items:     ", pos), items(total) {
 		buf = new char[strlen(shape) + 1];
 	}
 
@@ -175,14 +176,17 @@ class Map : public Panel {
 	int   upper;
 	char  buffer[100];
 	Item* items;
+	int numOfItems;
 
 public:
 	Map(int width, int height, const Position& pos)
 		: map(new bool[width*height]), width(width), height(height), upper(height - 1),
-		Panel(nullptr, width, height, pos), items(nullptr)
+		Panel(nullptr, width, height, pos), items(nullptr), numOfItems(0)
 	{
 		for (int i = 0; i < width*height; i++)
+		{
 			map[i] = false;
+		}
 	}
 
 	~Map() { if (map) delete[] map; }
@@ -195,12 +199,19 @@ public:
 	//	if (this->score) this->score->addScore(score);
 	//}
 
-	void setItems(Item* items) {
-		this->items = items;
+	void setItems(int items) {
+		numOfItems = items;
 	}
 
 	void decTotal(int items) {
 		if (this->items) this->items->decTotal(items);
+	}
+
+	bool isOpened(Position pos) {
+		if (map[pos.x + pos.y*this->width])
+			return true;
+		else
+			return false;
 	}
 
 	//bool isLineAllOccupied(int line) {
@@ -272,115 +283,144 @@ public:
 	}
 };
 
-//struct BlockShape {
-//	string shape;
-//	int width;
-//	int height;
-//};
-//
-//class Block : public GameObject {
-//	float x;
-//	float y;
-//	float speed;
-//	bool interactable;
-//	Map* map;
-//
-//public:
-//	Block(const BlockShape& shape, bool interactable = true, const Position& pos = Position{ 0, 0 })
-//		: GameObject(shape.shape.c_str(), shape.width, shape.height, pos), x(.0f), y(.0f), speed(0.02f), interactable(interactable), map(nullptr)
-//	{ }
-//
-//	void rotateShape() {
-//		static char* shape = new char[GameObject::width*GameObject::height];
-//		for (int y = 0; y < height; y++)
-//			for (int x = 0; x < width; x++)
-//				shape[(GameObject::width-1-x)*GameObject::height+y] = this->shape[y*GameObject::width + x];
-//		setShape(shape);
-//		swap(GameObject::width, GameObject::height);
-//	}
-//
-//	void setInteractable() { interactable = true;  }
-//
-//	void setPos(int x, int y) {
-//		GameObject::setPos(x, y);
-//	}
-//
-//	void setMap(Map* map) {
-//		this->map = map;
-//	}
-//
-//	void update() {
-//		static vector<int> comboBonus { 0, 40, 100, 300, 1200 };
-//		if (isActive() == false) return;
-//		if (!interactable || !map) return;
-//
-//		if (map->isGrounded(shape, pos, width, height)) {
-//			map->place(shape, pos, width, height);
-//			for (int i = height - 1; i >= 0; --i) {
-//				int nCombos = 0;
-//				while (map->evaluateLine(pos.y + i)) {
-//					nCombos++;
-//				}
-//				if (nCombos < comboBonus.size())
-//					map->addScore( comboBonus[nCombos] );
-//			}
-//			setActive(false);
-//			return;
-//		}		
-//
-//		if (Input::GetKeyDown(KeyCode::Right)) {
-//			x++;
-//			if (parent) {
-//				if (x + width >= parent->getWidth()) x = parent->getWidth() - width;
-//			}
-//			else {
-//				if (x + width >= screen.getWidth()/2) x = screen.getWidth() - width;
-//			}
-//		}
-//		if (Input::GetKeyDown(KeyCode::Left)) {
-//			x--;
-//			if (x < 0.0f) x = 0.0f;
-//		}
-//		if (Input::GetKeyDown(KeyCode::Up)) {
-//			rotateShape();
-//		}
-//		if (Input::GetKeyDown(KeyCode::Down)) {
-//			speed *= 2;
-//		}			
-//		if (Input::GetKeyDown(KeyCode::Space)) {
-//			if (map) {
-//				pos.y = y;
-//				while (!map->isGrounded(shape, pos, width, height)) {
-//					pos.y++; y+= 1.0f;
-//				}
-//				return;
-//			}
-//		}
-//		if (Input::GetKeyDown(KeyCode::A)) {
-//			rotateShape();
-//		}
-//		y += speed;
-//	}
-//
-//	void draw(const Position& inheritedPos) {
-//		
-//		if (interactable == true) {
-//			pos.x = (int)x, pos.y = (int)y;
-//		}
-//
-//		for (int i = pos.y + 1; map && i < map->getHeight(); i++) {
-//			if ( map->isOccupied(Position{pos.x, i}))
-//				break;
-//			screen.draw("\xFA", 1, 1, Position{ pos.x, i } + inheritedPos);
-//		}
-//		for (int i = pos.y + 1; map && i < map->getHeight(); i++) {
-//			if (map->isOccupied(Position{ pos.x + width - 1, i }))
-//				break;
-//			screen.draw("\xFA", 1, 1, Position{ pos.x + width - 1, i } +inheritedPos);
-//		}
-//		screen.draw(shape, width, height, pos + inheritedPos);
-//	}
-//};
+struct MonsterShape {
+	string shape;
+	int width;
+	int height;
+};
+
+class Monster : public GameObject {
+	float x;
+	float y;
+	float speed;
+	int items;
+	Map* map;
+	//bool interactable;
+
+public:
+	Monster(const MonsterShape& shape, bool interactable = true, const Position& pos = Position{ 0, 0 })
+		: GameObject(shape.shape.c_str(), shape.width, shape.height, pos), x(.0f), y(.0f), speed(0.02f), map(nullptr), items(0)
+		//, interactable(interactable)
+	{ }
+
+	//void rotateShape() {
+	//	static char* shape = new char[GameObject::width*GameObject::height];
+	//	for (int y = 0; y < height; y++)
+	//		for (int x = 0; x < width; x++)
+	//			shape[(GameObject::width-1-x)*GameObject::height+y] = this->shape[y*GameObject::width + x];
+	//	setShape(shape);
+	//	swap(GameObject::width, GameObject::height);
+	//}
+
+	//void setInteractable() { interactable = true;  }
+
+	void setPos(int x, int y) {
+		GameObject::setPos(x, y);
+	}
+
+	void setMap(Map* map) {
+		this->map = map;
+	}
+
+	void moveAround(Map* map, Position pos) {
+		srand(time(NULL));
+		Position temp;
+		temp.x = pos.x;
+		temp.y = pos.y;
+		while (true) {
+			switch (rand() % 8)
+			{
+			case 0:
+				pos.x--; pos.y--; break;
+			case 1:
+				pos.y--; break;
+			case 2:
+				pos.x++; pos.y--; break;
+			case 3:
+				pos.x--; break;
+			case 4:
+				pos.x++; break;
+			case 5:
+				pos.x--; pos.y++; break;
+			case 6:
+				pos.y++; break;
+			case 7:
+				pos.x++; pos.y++; break;
+			}
+			if (pos.x == 0 || pos.y == 0 || pos.x == map->getWidth() + 1 || pos.y == map->getHeight() + 1) {
+				pos.x = temp.x;
+				pos.y = temp.y;
+			}
+		}
+		return;
+	}
+
+	void eat(Position pos) {
+		if (!map->isOpened(pos)) {
+			items++;
+		}
+		return;
+	}
+
+	void update() {
+		if (isActive() == false) return;
+
+		moveAround(map, this->pos);
+		eat(this->pos);
+
+		//if (Input::GetKeyDown(KeyCode::Right)) {
+		//	x++;
+		//	if (parent) {
+		//		if (x + width >= parent->getWidth()) x = parent->getWidth() - width;
+		//	}
+		//	else {
+		//		if (x + width >= screen.getWidth()/2) x = screen.getWidth() - width;
+		//	}
+		//}
+		//if (Input::GetKeyDown(KeyCode::Left)) {
+		//	x--;
+		//	if (x < 0.0f) x = 0.0f;
+		//}
+		//if (Input::GetKeyDown(KeyCode::Up)) {
+		//	rotateShape();
+		//}
+		//if (Input::GetKeyDown(KeyCode::Down)) {
+		//	speed *= 2;
+		//}			
+		//if (Input::GetKeyDown(KeyCode::Space)) {
+		//	if (map) {
+		//		pos.y = y;
+		//		while (!map->isGrounded(shape, pos, width, height)) {
+		//			pos.y++; y+= 1.0f;
+		//		}
+		//		return;
+		//	}
+		//}
+		//if (Input::GetKeyDown(KeyCode::A)) {
+		//	rotateShape();
+		//}
+		//y += speed;
+	}
+
+	void draw(const Position& inheritedPos) {
+
+		//if (interactable == true) {
+		//	pos.x = (int)x, pos.y = (int)y;
+		//}
+		//
+		//for (int i = pos.y + 1; map && i < map->getHeight(); i++) {
+		//	if ( map->isOccupied(Position{pos.x, i}))
+		//		break;
+		//	screen.draw("\xFA", 1, 1, Position{ pos.x, i } + inheritedPos);
+		//}
+		//for (int i = pos.y + 1; map && i < map->getHeight(); i++) {
+		//	if (map->isOccupied(Position{ pos.x + width - 1, i }))
+		//		break;
+		//	screen.draw("\xFA", 1, 1, Position{ pos.x + width - 1, i } +inheritedPos);
+		//}
+		screen.draw(shape, width, height, pos + inheritedPos);
+	}
+};
 
 int main()
 {
@@ -394,22 +434,16 @@ int main()
 	//std::system(mode.c_str());
 	std::system("chcp 437");
 
-	////auto candidate = candidates[rand() % candidates.size()];
-	////auto next = candidates[rand() % candidates.size()];
-	//	
 	auto mainMap = new Map(50, 15, Position{ 1, 1 });
 	auto& children = mainMap->getChildren();
-	//main->add(new Block(candidate, true, Position{ rand() % main->getWidth(), 0 }));
-	//static_cast<Block *>(children[0])->setMap(main);
 
 	int numOfMonsters = monsters.size();
 	auto statePanel = new Panel(nullptr, mainMap->getWidth(), 3 + numOfMonsters, Position{ 1, mainMap->getHeight() + 1 });
 	statePanel->add(new Text("Total Movement = ", Position{ 1, 1 }));
 	auto items = new Item(Position{ 1, 2 }, mainMap->getWidth() * mainMap->getHeight() / 2);
 	statePanel->add(items);
-	//statePanel->add(new Block(next, false, Position{ nextPanel->getWidth()/2 - 2, nextPanel->getHeight()/2-1}) );
 
-	//main->setScore(score);
+	mainMap->setItems(mainMap->getWidth() * mainMap->getHeight());
 
 	gameObjects.push_back(mainMap);
 	gameObjects.push_back(statePanel);
@@ -420,32 +454,12 @@ int main()
 		screen.clear();
 		for (auto obj : gameObjects) obj->internalUpdate();
 
-		//	bool needANewBlock = false;
-		//	for (auto it = children.begin(); it != children.end(); ) {
-		//		auto child = *it;
-		//		if (child->isActive()) {
-		//			it++;
-		//			continue;
-		//		}
-		//		it = children.erase(it);
-		//		needANewBlock = true;
-		//	}
-		//	if (needANewBlock) {
-		//		auto nextBlock = static_cast<Block *>(nextPanel->pop());
-		//		nextBlock->setInteractable();
-		//		nextBlock->setMap(main);
-		//		nextBlock->setPos(main->getWidth() / 2 - 4, 0);
-		//		main->add(nextBlock);
-		//		next = candidates[rand() % candidates.size()];
-		//		nextPanel->add(new Block(next, false, Position{ nextPanel->getWidth() / 2 - 2, 3 }));
-		//	}
-		//	
 		for (auto it = gameObjects.cbegin();
 			it != gameObjects.cend(); it++)
 			(*it)->internalDraw();
 
 		screen.render();
-		Sleep(1);
+		Sleep(1000);
 
 		Input::EndOfFrame();
 	}
