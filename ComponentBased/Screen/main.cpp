@@ -19,9 +19,41 @@ class Transform;
 class Component {
 	GameObject* gameObject;
 	Transform* transform;
+
 public:
-	Component() {}
+	Component(GameObject* gameObject) 
+		: gameObject(gameObject),
+		transform(gameObject->getTransform())
+	{}
+
+	// 객체를 저장할 때는 컴포넌트로 upCasting하여 저장하지만, 사용할때는 downCasting하여 쓴다.
+	// 상속받는 클래스가 upCasting하여 저장할 때, 소멸을 시킬 경우 원본 클래스의 소멸자가 호출되는 메커니즘
 	virtual ~Component() {}
+
+protected: //private도 괜찮다.
+	virtual void awake() {}
+	virtual void onEnable() {}
+	virtual void start() {}
+	virtual void fixedUpdate() {}
+	virtual void update() {}
+	virtual void lateUpdate() {}
+	virtual void onDisable() {}
+	virtual void onDeestroy() {}
+
+};
+
+class MyScript : public Component {
+protected:
+	// C#의 경우 override 키워드를 사용한다.
+	void start() 
+	{
+
+	}
+
+	void update() 
+	{
+
+	}
 };
 
 class Transform : public Component {
@@ -47,14 +79,23 @@ class GameObject {
 // protected의 경우 getter setter함수 쓰기
 
 public:
-	GameObject() {
-
+	//클래스형 자료형은 그대로 넘기지 말고 반드시 레퍼런스나 포인터로 넘겨야 한다.
+	//하이라키 뷰에 등록되는 게임오브젝트
+	GameObject(const string& name, GameObject* parent=nullptr, const string& tag="")
+		: name(name), parent(parent), tag(tag), enabled(true),
+		transform(new Transform ) {
+		componets.clear();
+		componets.push_back(transform); // 멤버변수(게임객체)에 등록하고, 컴포넌트에 등록한다.
 	}
 
 	// Component에게 상속을 받는 모델이기 때문에 가상소멸자가 굳이 필요하진 않다
 	~GameObject()
 	{
 
+	}
+
+	Transform* getTransform() {
+		return transform;
 	}
 
 	// 현재 게임오브젝트 자체에서 찾는게 아닌 전체 게임오브젝트 리스트에서 찾기때문에 static으로 선언한다
