@@ -3,26 +3,68 @@
 #include <cstdio>
 #include <Windows.h>
 
+// Vector2 v1;
+// Vector2 v2 = v1;
+// Vector2 v3{v2};
+// v3 = v1;
+// explicit
+
 using namespace std;
 
-struct Position {
-	int x;
-	int y;
-	Position(int x = 0, int y = 0) : x(x), y(y) {}
-	Position(const Position& other) : Position(other.x, other.y) {}
+struct Vector2 {
+	float x;
+	float y;
+	Vector2(float x = 0, float y = 0) : x(x), y(y) {}
+	explicit Vector2(const Vector2& other) : Vector2(other.x, other.y) {}
 
-	Position operator+(const Position& other) {
-		return Position{ this->x + other.x, this->y + other.y };
+	static Vector2 zero{ 0,0 };
+	static Vector2 one{ 1,1 };
+	static Vector2 up{ 0,1 };
+	static Vector2 down{ 0,-1 };
+	static Vector2 left{ -1,0 };
+	static Vector2 right{ 1,0 };
+
+
+	float magnitude() {
+		return sqrt(this->magnitude);
 	}
-	bool operator==(const Position& other) {
+
+	float sqrtMagnitude() {
+		return (double)x * x + y * y;
+	}
+
+	Vector2 operator-(const Vector2& other) {
+		return Vector2{ this->x - other.x, this->y - other.y };
+	}
+
+	static friend Vector2 operator-(const Vector2& a, const Vector2& b);
+
+	static float Distance(const Vector2& a, const Vector2& b);
+
+	Vector2 operator+(const Vector2& other) {
+		return Vector2{ this->x + other.x, this->y + other.y };
+	}
+	bool operator==(const Vector2& other) {
 		return (x == other.x && y == other.y);
 	}
 
-	Position& operator+=(const Position& other) {
+	Vector2& operator+=(const Vector2& other) {
 		x += other.x, y += other.y;
 		return *this;
 	}
 };
+
+Vector2 Vector2::zero{ 0,0 };
+Vector2 Vector2::one{ 1,1 };
+Vector2 Vector2::up{ 0,1 };
+Vector2 Vector2::down{ 0,-1 };
+Vector2 Vector2::left{ -1,0 };
+Vector2 Vector2::right{ 1,0 };
+
+float Vector2::Distance(const Vector2& a, const Vector2& b) {
+	return (a.operator-(b)).magnitude();
+}
+
 
 enum class KeyCode {
 	Space = 0,
@@ -51,7 +93,7 @@ class Input {
 	static bool evaluated;
 	static bool gotMouseEvent;
 	static bool gotKeyEvent;
-	static Position mousePosition;
+	static Vector2 mousePosition;
 	static WORD vKeyCode;
 
 	static void GetEvent()
@@ -104,7 +146,7 @@ public:
 
 		EndOfFrame();
 	}
-	static bool GetMouseEvent(Position& pos) {
+	static bool GetMouseEvent(Vector2& pos) {
 		if (evaluated == false) GetEvent();
 
 		if (gotMouseEvent == true) {
@@ -136,7 +178,7 @@ DWORD Input::Events;
 bool Input::evaluated = false;
 bool Input::gotMouseEvent = false;
 bool Input::gotKeyEvent = false;
-Position Input::mousePosition{ -1, -1 };
+Vector2 Input::mousePosition{ -1, -1 };
 WORD Input::vKeyCode{ 0 };
 
 class Borland {
@@ -160,12 +202,12 @@ public:
 	{
 		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), _COORD{ (SHORT)x, (SHORT)y });
 	}
-	static void gotoxy(const Position* pos)
+	static void gotoxy(const Vector2* pos)
 	{
 		if (!pos) return;
 		gotoxy( (*pos).x, (*pos).y);
 	}
-	static void gotoxy(const Position& pos)
+	static void gotoxy(const Vector2& pos)
 	{
 		gotoxy( pos.x, pos.y);
 	}
@@ -203,7 +245,7 @@ public:
 
 	int getHeight() const { return height;  }
 
-	void drawRect(const Position& pos, int w, int h)
+	void drawRect(const Vector2& pos, int w, int h)
 	{
 		canvas[pos.x] = '\xDA';
 		canvas[pos.x + w-1] = '\xBF';
@@ -217,7 +259,7 @@ public:
 		}
 	}
 
-	void draw(const char* shape, int w, int h, const Position& pos)
+	void draw(const char* shape, int w, int h, const Vector2& pos)
 	{
 		if (!shape) return;
 		for (int i = 0; i < h; i++)
