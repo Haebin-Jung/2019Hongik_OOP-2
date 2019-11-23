@@ -12,25 +12,24 @@
 using namespace std;
 
 struct Vector2 {
-	float x;
-	float y;
-	Vector2(float x = 0, float y = 0) : x(x), y(y) {}
-	explicit Vector2(const Vector2& other) : Vector2(other.x, other.y) {}
+	int x;
+	int y;
+	Vector2(int x = 0, int y = 0) : x(x), y(y) {}
+	Vector2(const Vector2& other) : Vector2(other.x, other.y) {}
 
-	static Vector2 zero{ 0,0 };
-	static Vector2 one{ 1,1 };
-	static Vector2 up{ 0,1 };
-	static Vector2 down{ 0,-1 };
-	static Vector2 left{ -1,0 };
-	static Vector2 right{ 1,0 };
-
+	static Vector2 zero;
+	static Vector2 one;
+	static Vector2 up;
+	static Vector2 down;
+	static Vector2 left;
+	static Vector2 right;
 
 	float magnitude() {
-		return sqrt(this->magnitude);
+		return sqrt(this->magnitude());
 	}
 
 	float sqrtMagnitude() {
-		return (double)x * x + y * y;
+		return (double) x * x + y * y;
 	}
 
 	Vector2 operator-(const Vector2& other) {
@@ -39,7 +38,7 @@ struct Vector2 {
 
 	static friend Vector2 operator-(const Vector2& a, const Vector2& b);
 
-	static float Distance(const Vector2& a, const Vector2& b);
+	static float Distance( Vector2& a, const Vector2& b);
 
 	Vector2 operator+(const Vector2& other) {
 		return Vector2{ this->x + other.x, this->y + other.y };
@@ -61,7 +60,12 @@ Vector2 Vector2::down{ 0,-1 };
 Vector2 Vector2::left{ -1,0 };
 Vector2 Vector2::right{ 1,0 };
 
-float Vector2::Distance(const Vector2& a, const Vector2& b) {
+
+Vector2 operator-(const Vector2& a, const Vector2& b) {
+	return Vector2(a.x - b.x, a.y - b.y);
+}
+
+float Vector2::Distance( Vector2& a, const Vector2& b) {
 	return (a.operator-(b)).magnitude();
 }
 

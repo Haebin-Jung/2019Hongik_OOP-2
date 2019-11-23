@@ -14,14 +14,14 @@
 
 using namespace std;
 
-class GameObject;
-class Transform;
 
 // Component와 같이 추상적인 표현, 실체로 만들기 어려운 것을 추상객체, 추상클래스(Abstract Class)라고 한다.
 // 순수가상함수(pure virtual function)는 virtual 함수를 선언하고 body는 없다. == 함수 주소만 가지고 가진것은 없다.(nullptr를 가리킨다)
 // 순수가상함수를 가진 클래스는 직접 생성할 수 없다.
 // Abstract method로만 구성된 함수 == Interface
 // Interface를 가져와 구현(implement)하는 것 == 함수 body를 만드는 것
+class GameObject;
+class Transform;
 class Component {
 private:
 	Transform* transform;
@@ -35,10 +35,10 @@ public:
 	// C#, Java의 경우  클래스명 앞에 abstract 키워드를 사용하면 추상클래스를 만들 수 있다.
 
 	virtual ~Component() {}
-	// 객체를 저장할 때는 컴포넌트로 upCasting하여 저장하지만, 사용할때는 downCasting하여 쓴다.
-	// 상속받는 클래스가 upCasting하여 저장할 때, 소멸을 시킬 경우 원본 클래스의 소멸자가 호출되는 메커니즘
+	// 객체를 저장할 때는 컴포넌트로 Up Casting하여 저장하지만, 사용할때는 Down Casting하여 쓴다.
+	// 상속받는 클래스가 Up Casting하여 저장할 때, 소멸을 시킬 경우 원본 클래스의 소멸자가 호출되는 메커니즘
 
-protected: //private도 괜찮다.
+protected:
 	GameObject* gameObject;
 	virtual void awake() {}
 	virtual void onEnable() {}
@@ -48,7 +48,7 @@ protected: //private도 괜찮다.
 	virtual void lateUpdate() {}
 	virtual void onDisable() {}
 	virtual void onDeestroy() {}
-	//virtual void onDeestroy() = 0; 순수가상함수의 예
+	// virtual void onDeestroy() = 0; 순수가상함수의 예
 	// 상속된 클래스에서는 반드시 함수 body를 만들어 줘야한다
 
 };
@@ -112,7 +112,8 @@ public:
 	// 하이라키 뷰에 등록되는 게임오브젝트
 	GameObject(const string& name, GameObject* parent=nullptr, const string& tag="")
 		: name(name), parent(parent), tag(tag), enabled(true),
-		transform(new Transform )
+		transform(new Transform( gameObject, Vector2::zero, Vector2::zero, Vector2::one)),
+		Component(gameObject)
 	{
 		components.clear();
 		components.push_back(transform); // 멤버변수(게임객체)에 등록하고, 컴포넌트에 등록한다.
@@ -127,12 +128,12 @@ public:
 	void traverse() {
 		if (enabled == false) return;
 
-		for (auto comp : components) {
-			comp->update();
-		}
-		for (auto child : children) {
-			child->traverse();
-		}
+		//for (auto comp : components) {
+		//	comp->Component::update();
+		//}
+		//for (auto child : children) {
+		//	child->traverse();
+		//}
 	}
 
 	Transform* getTransform() {
@@ -175,54 +176,62 @@ public:
 	static GameEngine& getInstance();
 
 	void mainLoop() {
-		for (auto obj : GameObject::gameObjects) {
-			obj->traverseAwake();
-		}
-		for (auto obj : GameObject::gameObjects) {
-			obj->traverseOnEnable();
-		}
-		for (auto obj : GameObject::gameObjects) {
-			obj->traverseStart();
-		}
+		//for (auto obj : GameObject::gameObjects)
+		//{
+		//	obj->traverseAwake();
+		//}
+		//for (auto obj : GameObject::gameObjects)
+		//{
+		//	obj->traverseOnEnable();
+		//}
+		//for (auto obj : GameObject::gameObjects)
+		//{
+		//	obj->traverseStart();
+		//}
 
 		while (!Input::GetKeyDown(KeyCode::Esc)) {
 			screen.clear();
-			// update
-			for (auto obj : GameObject::gameObjects) {
-				obj->traverseFixedUpdate();
-			}
-			for (auto obj : GameObject::gameObjects) {
-				obj->traverseUpdate();
-			}
-			for (auto obj : GameObject::gameObjects) {
-				obj->traverseLateUpdate();
-			}
+			//// update
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traverseFixedUpdate();
+			//}
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traverseUpdate();
+			//}
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traverseLateUpdate();
+			//}
 
-			// erase in active objects
+			//// erase in active objects
 
-			//draw
-			for (auto obj : GameObject::gameObjects) {
-				obj->traversePreDraw();
-			}
-			for (auto obj : GameObject::gameObjects) {
-				obj->traverseDraw();
-			}
-			for (auto obj : GameObject::gameObjects) {
-				obj->traversePostDraw();
-			}
+			////draw
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traversePreDraw();
+			//}
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traverseDraw();
+			//}
+			//for (auto obj : GameObject::gameObjects)
+			//{
+			//	obj->traversePostDraw();
+			//}
 
 			screen.render();
 			Sleep(100);
 
 			Input::EndOfFrame();
 		}
-		for (auto obj : GameObject::gameObjects) {
-			obj->startOnDisable();
-		}
-		for (auto obj : GameObject::gameObjects) {
-			obj->startOnDestroy();
-		}
-
+		//for (auto obj : GameObject::gameObjects) {
+		//	obj->startOnDisable();
+		//}
+		//for (auto obj : GameObject::gameObjects) {
+		//	obj->startOnDestroy();
+		//}
 		return;
 	}
 };

@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(112): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\main.cpp(32): error C2027: 정의되지 않은 형식 'GameObject'을(를) 사용했습니다.
+  c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\main.cpp(23): note: 'GameObject' 선언을 참조하십시오.
