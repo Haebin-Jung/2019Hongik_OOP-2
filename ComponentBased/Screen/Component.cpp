@@ -2,29 +2,19 @@
 
 
 
-Component::Component()
-{
-}
-
-
-Component::~Component()
-{
-}
-
-
 Component::Component(GameObject* gameObject)
-		: gameObject(gameObject),
-		transform(gameObject->getTransform())
-	{}
+	: gameObject(gameObject), transform(gameObject->getTransform())
+{}
 
 Component::~Component() {}
-	
-GameObject* gameObject;
-void awake() {}
-void onEnable() {}
-void start() {}
-void fixedUpdate() {}
-void update() {}
-void lateUpdate() {}
-void onDisable() {}
-void onDeestroy() {}
+
+void Component::awake() {}
+void Component::onEnable() {}
+void Component::start() {}
+void Component::fixedUpdate() {}
+void Component::update() {}
+void Component::lateUpdate() {}
+void Component::onDisable() {}
+void Component::onDeestroy() {}
+
+void Component::doUpdate(Component* comp) { comp->update(); };

@@ -1,14 +1,11 @@
 #ifndef UTILS_H_
 #define UTILS_H_
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
 #include <cstdio>
 #include <Windows.h>
-
-// Vector2 v1;
-// Vector2 v2 = v1;
-// Vector2 v3{v2};
-// v3 = v1;
-// explicit
-
+#include <math.h>
+#include <vector>
 using namespace std;
 
 struct Vector2 {
@@ -24,12 +21,12 @@ struct Vector2 {
 	static Vector2 left;
 	static Vector2 right;
 
-	float magnitude() {
+	double magnitude() {
 		return sqrt(this->magnitude());
 	}
 
-	float sqrtMagnitude() {
-		return (double) x * x + y * y;
+	double sqrtMagnitude() {
+		return x * x + y * y;
 	}
 
 	Vector2 operator-(const Vector2& other) {
@@ -38,7 +35,7 @@ struct Vector2 {
 
 	static friend Vector2 operator-(const Vector2& a, const Vector2& b);
 
-	static float Distance( Vector2& a, const Vector2& b);
+	static double Distance( Vector2& a, const Vector2& b);
 
 	Vector2 operator+(const Vector2& other) {
 		return Vector2{ this->x + other.x, this->y + other.y };
@@ -65,7 +62,7 @@ Vector2 operator-(const Vector2& a, const Vector2& b) {
 	return Vector2(a.x - b.x, a.y - b.y);
 }
 
-float Vector2::Distance( Vector2& a, const Vector2& b) {
+double Vector2::Distance( Vector2& a, const Vector2& b) {
 	return (a.operator-(b)).magnitude();
 }
 

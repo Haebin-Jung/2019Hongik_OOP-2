@@ -1,5 +1,27 @@
-﻿  main.cpp
-c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(32): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(112): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\main.cpp(32): error C2027: 정의되지 않은 형식 'GameObject'을(를) 사용했습니다.
-  c:\users\해빈\documents\github\2019hongik_oop-2\componentbased\screen\main.cpp(23): note: 'GameObject' 선언을 참조하십시오.
+﻿  Component.cpp
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\gameobject.h(14): error C2504: 'Component': 기본 클래스를 정의하지 않았습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(109): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(268): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\ucrt\string.h(338): note: 'strncpy' 선언을 참조하십시오.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\transform.h(7): error C2504: 'Component': 기본 클래스를 정의하지 않았습니다.
+  GameEngine.cpp
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(109): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\transform.h(7): error C2504: 'Component': 기본 클래스를 정의하지 않았습니다.
+  GameObject.cpp
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(109): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\transform.h(7): error C2504: 'Component': 기본 클래스를 정의하지 않았습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\gameobject.cpp(12): error C2664: 'void std::vector<Component *,std::allocator<_Ty>>::push_back(_Ty &&)': 인수 1을(를) 'Transform *'에서 'const _Ty &'(으)로 변환할 수 없습니다.
+          with
+          [
+              _Ty=Component *
+          ]
+  c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\gameobject.cpp(12): note: 원인: 'Transform *'에서 'const _Ty'(으)로 변환할 수 없습니다.
+          with
+          [
+              _Ty=Component *
+          ]
+  c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\gameobject.cpp(12): note: 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+  Transform.cpp
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\utils.h(109): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+c:\users\user\documents\github\2019hongik_oop-2\componentbased\screen\gameobject.h(14): error C2504: 'Component': 기본 클래스를 정의하지 않았습니다.
+  코드를 생성하고 있습니다...
