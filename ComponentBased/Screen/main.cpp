@@ -1,7 +1,6 @@
 // 2019 홍익대학교 2학년 2학기 객체지향프로그래밍(2) 수업
 // 2019 Honik Univ. OOP(2) class
 // Component-based Design
-#define _CRT_SECURE_NO_WARNINGS
 #pragma once
 #include <iostream>
 #include <conio.h>

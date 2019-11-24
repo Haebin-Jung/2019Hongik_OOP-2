@@ -1,15 +1,13 @@
 #pragma once
-#pragma once
-#include "Component.h"
 #include <string>
 #include <vector>
 using namespace std;
 
-
-
+//상호참조할 클래스 전방선언
 class Component;
 class Transform;
-class GameEngine;
+
+
 class GameObject : public Component
 {
 private:
@@ -17,10 +15,14 @@ private:
 	string		name;
 	string		tag;
 	GameObject* parent;
+	string		type;
+
+	Component* component;
+	Transform* transform;
 
 	static vector<GameObject*> gameObjects;
+	static vector<GameObject*> children;
 	vector<Component*> components;
-	Transform* transform;
 	friend class GameEngine;
 
 public:
@@ -39,4 +41,6 @@ public:
 	virtual bool isActive();
 
 	void setActive(bool flag);
+
+	void attachType(string typeName);
 };

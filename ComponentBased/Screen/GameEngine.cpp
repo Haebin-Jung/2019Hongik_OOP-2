@@ -1,5 +1,8 @@
+#pragma once
 #include "GameEngine.h"
 
+//참조할 클래스 포함
+#include "GameObject.h"
 
 
 GameEngine::GameEngine() : screen(Screen::getInstance()) {

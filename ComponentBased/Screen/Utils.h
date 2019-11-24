@@ -1,6 +1,6 @@
 #ifndef UTILS_H_
 #define UTILS_H_
-#define _CRT_SECURE_NO_WARNINGS
+
 #include <iostream>
 #include <cstdio>
 #include <Windows.h>

@@ -1,7 +1,10 @@
 #pragma once
 #include "Utils.h"
-#include "GameObject.h"
 #include <string>
+
+//상호참조할 클래스 전방선언
+class GameObject;
+
 
 class GameEngine
 {
