@@ -10,11 +10,10 @@
 #include <string>
 #include <utility>
 #include <algorithm>
-#include "Utils.h"
-#include "Component.h"
 #include "GameObject.h"
-#include "Transform.h"
 #include "GameEngine.h"
+#include "Component.h"
+#include "Transform.h"
 
 using namespace std;
 

@@ -1,8 +1,21 @@
 #pragma once
 #include "GameEngine.h"
 
+using namespace std;
+
 //참조할 클래스 포함
 #include "GameObject.h"
+#include "Utils.h"
+
+/* STATIC VARIABLES and FUNCTIONS */
+GameEngine* GameEngine::instance = nullptr;
+
+GameEngine& GameEngine::getInstance() {
+	if (instance == nullptr) {
+		instance = new GameEngine();
+	}
+	return *instance;
+}
 
 
 GameEngine::GameEngine() : screen(Screen::getInstance()) {
@@ -16,14 +29,7 @@ GameEngine::GameEngine() : screen(Screen::getInstance()) {
 	}
 
 void GameEngine::mainLoop() {
-		for (auto obj : GameObject::gameObjects)
-		{
-			//obj->traverseAwake();
-		}
-		for (auto obj : GameObject::gameObjects)
-		{
-			//obj->traverseOnEnable();
-		}
+		
 		for (auto obj : GameObject::gameObjects)
 		{
 			//obj->traverseStart();
@@ -34,52 +40,17 @@ void GameEngine::mainLoop() {
 			// update
 			for (auto obj : GameObject::gameObjects)
 			{
-				//obj->traverseFixedUpdate();
-			}
-			for (auto obj : GameObject::gameObjects)
-			{
 				//obj->traverseUpdate();
 			}
-			for (auto obj : GameObject::gameObjects)
-			{
-				//obj->traverseLateUpdate();
-			}
-
 			// erase in active objects
 
 			//draw
-			for (auto obj : GameObject::gameObjects)
-			{
-				//obj->traversePreDraw();
-			}
-			for (auto obj : GameObject::gameObjects)
-			{
-				//obj->traverseDraw();
-			}
-			for (auto obj : GameObject::gameObjects)
-			{
-				//obj->traversePostDraw();
-			}
-
+			
 			screen.render();
 			Sleep(100);
 
 			Input::EndOfFrame();
 		}
-		for (auto obj : GameObject::gameObjects) {
-			//obj->startOnDisable();
-		}
-		for (auto obj : GameObject::gameObjects) {
-			//obj->startOnDestroy();
-		}
 		return;
 	}
 
-GameEngine* GameEngine::instance = nullptr;
-
-GameEngine& GameEngine::getInstance() {
-	if (instance == nullptr) {
-		instance = new GameEngine();
-	}
-	return *instance;
-}

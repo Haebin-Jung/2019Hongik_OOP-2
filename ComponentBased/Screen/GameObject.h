@@ -1,6 +1,8 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 //상호참조할 클래스 전방선언
@@ -17,7 +19,6 @@ private:
 	GameObject* parent;
 	string		type;
 
-	Component* component;
 	Transform* transform;
 
 	static vector<GameObject*> gameObjects;
@@ -26,21 +27,23 @@ private:
 	friend class GameEngine;
 
 public:
-	GameObject(const string& name, GameObject* parent, const string& tag);
+	GameObject(const string& name, GameObject* parent = nullptr, const string& tag = "");
 
 	~GameObject();
 
 	void traverse();
 
-	Transform* getTransform();
+	// getter, setter 함수 등은 인라인
+
+	Transform* getTransform() { return transform; }
+
+	void GameObject::setParent(GameObject* parent) { this->parent = parent; }
+
+	bool GameObject::isActive() { return enabled; }
+
+	void GameObject::setActive(bool flag = true) { enabled = flag; }
+
+	void GameObject::attachType(string typeName) { type = typeName; }
 
 	static GameObject* Find(const string& name);
-
-	void setParent(GameObject* parent);
-
-	virtual bool isActive();
-
-	void setActive(bool flag);
-
-	void attachType(string typeName);
 };

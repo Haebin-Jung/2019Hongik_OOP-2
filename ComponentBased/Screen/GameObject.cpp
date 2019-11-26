@@ -1,5 +1,17 @@
 #include "GameObject.h"
 
+
+/* STATIC VARIABLES and FUNCTIONS */
+vector<GameObject*> gameObjects;
+
+GameObject* GameObject::Find(const string& name)
+{
+	for (auto obj : gameObjects) {
+		if (obj->name == name)	return obj;
+		else return nullptr;
+	}
+}
+
 //참조할 클래스 포함
 #include "Component.h"
 #include "Transform.h"
@@ -7,8 +19,7 @@
 
 GameObject::GameObject(const string& name, GameObject* parent = nullptr, const string& tag = "")
 	: name(name), parent(parent), tag(tag), enabled(true),
-	component(new Component(this)),
-	transform(new Transform(this, Vector2::zero, Vector2::zero, Vector2::one))
+	transform(new Transform) // Transform에서의 생성자 함수 필요
 {
 	components.clear();
 	components.push_back(transform);
@@ -27,21 +38,3 @@ void GameObject::traverse() {
 			child->traverse();
 		}
 }
-
-Transform* GameObject::getTransform() { return transform; }
-
-GameObject* GameObject::Find(const string& name)
-{ 
-	for (auto obj : gameObjects) {
-		if (obj->name == name)	return obj;
-		else return nullptr;
-	}
-}
-
-void GameObject::setParent(GameObject* parent) { this->parent = parent; }
-
-bool GameObject::isActive() { return enabled; }
-
-void GameObject::setActive(bool flag = true) { enabled = flag; }
-
-void GameObject::attachType(string typeName) { type = typeName; }

@@ -9,8 +9,11 @@
 using namespace std;
 
 struct Vector2 {
-	int x;
-	int y;
+	float x;
+	float y;
+	const int X() const { return (int)x; }
+	const int Y() const { return (int)y; }
+	//변경 필요 시 const_cast
 	Vector2(int x = 0, int y = 0) : x(x), y(y) {}
 	Vector2(const Vector2& other) : Vector2(other.x, other.y) {}
 
@@ -35,7 +38,7 @@ struct Vector2 {
 
 	static friend Vector2 operator-(const Vector2& a, const Vector2& b);
 
-	static double Distance( Vector2& a, const Vector2& b);
+	static friend double Distance( Vector2& a, const Vector2& b);
 
 	Vector2 operator+(const Vector2& other) {
 		return Vector2{ this->x + other.x, this->y + other.y };
@@ -62,7 +65,7 @@ Vector2 operator-(const Vector2& a, const Vector2& b) {
 	return Vector2(a.x - b.x, a.y - b.y);
 }
 
-double Vector2::Distance( Vector2& a, const Vector2& b) {
+double Distance( Vector2& a, const Vector2& b) {
 	return (a.operator-(b)).magnitude();
 }
 
@@ -182,6 +185,7 @@ bool Input::gotKeyEvent = false;
 Vector2 Input::mousePosition{ -1, -1 };
 WORD Input::vKeyCode{ 0 };
 
+
 class Borland {
 
 public:
@@ -248,15 +252,15 @@ public:
 
 	void drawRect(const Vector2& pos, int w, int h)
 	{
-		canvas[pos.x] = '\xDA';
-		canvas[pos.x + w-1] = '\xBF';
-		memset(&canvas[pos.x + 1], '\xC4', w - 2);
-		canvas[pos.x + (pos.y + (h - 1))*(width + 1)] = '\xC0';
-		canvas[pos.x + (pos.y + (h - 1))*(width + 1) + w-1] = '\xD9';
-		memset(&canvas[pos.x + 1 + (pos.y + (h - 1))*(width + 1)], '\xC4', w - 2);
+		canvas[pos.X()] = '\xDA';
+		canvas[pos.X() + w-1] = '\xBF';
+		memset(&canvas[pos.X() + 1], '\xC4', w - 2);
+		canvas[pos.X() + (pos.Y() + (h - 1))*(width + 1)] = '\xC0';
+		canvas[pos.X() + (pos.Y() + (h - 1))*(width + 1) + w-1] = '\xD9';
+		memset(&canvas[pos.X() + 1 + (pos.Y() + (h - 1))*(width + 1)], '\xC4', w - 2);
 		for (int i = 1; i < h-1; i++) {
-			canvas[pos.x + (pos.y + i)*(width + 1)] = '\xB3';
-			canvas[pos.x + w-1 + (pos.y + i)*(width + 1)] = '\xB3';
+			canvas[pos.X() + (pos.Y() + i)*(width + 1)] = '\xB3';
+			canvas[pos.X() + w-1 + (pos.Y() + i)*(width + 1)] = '\xB3';
 		}
 	}
 
@@ -265,7 +269,7 @@ public:
 		if (!shape) return;
 		for (int i = 0; i < h; i++)
 		{
-			strncpy(&canvas[pos.x + (pos.y + i)*(width + 1)], &shape[i*w], w);
+			strncpy(&canvas[pos.X() + (pos.Y() + i)*(width + 1)], &shape[i*w], w);
 		}
 	}
 

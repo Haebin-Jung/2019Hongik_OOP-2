@@ -1,14 +1,18 @@
 #pragma once
 #include "Component.h"
 
+using namespace std;
+
 //참조할 클래스 선언
-#include "Transform.h"
 #include "GameObject.h"
+#include "Transform.h"
 
 
 Component::Component(GameObject* gameObject)
+	: gameObject(gameObject),
+	transform(gameObject->getTransform())
 {}
-
+	
 Component::~Component() {}
 
 void Component::awake() {}
