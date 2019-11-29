@@ -1,0 +1,6 @@
+﻿  GameObject.cpp
+GameEngine.obj : error LNK2019: "public: void __cdecl GameObject::addComponent<class GridScript>(void)" (??$addComponent@VGridScript@@@GameObject@@QEAAXXZ) 외부 기호(참조 위치: "public: void __cdecl GameEngine::mainLoop(void)" (?mainLoop@GameEngine@@QEAAXXZ) 함수)에서 확인하지 못했습니다.
+GameEngine.obj : error LNK2019: "public: class GridScript * __cdecl GameObject::getComponent<class GridScript>(void)" (??$getComponent@VGridScript@@@GameObject@@QEAAPEAVGridScript@@XZ) 외부 기호(참조 위치: "public: void __cdecl GameEngine::mainLoop(void)" (?mainLoop@GameEngine@@QEAAXXZ) 함수)에서 확인하지 못했습니다.
+GridScript.obj : error LNK2001: "protected: virtual void __cdecl GridScript::start(void)" (?start@GridScript@@MEAAXXZ) 외부 기호를 확인할 수 없습니다.
+GridScript.obj : error LNK2001: "protected: virtual void __cdecl GridScript::update(void)" (?update@GridScript@@MEAAXXZ) 외부 기호를 확인할 수 없습니다.
+C:\Users\B407_11\Desktop\Component작업중\OOP-2019_2\Screen\x64\Debug\Screen.exe : fatal error LNK1120: 4개의 확인할 수 없는 외부 참조입니다.
