@@ -12,13 +12,14 @@ class Component {
 protected:
 	GameObject* gameObject;
 
+	friend class GameObject;
+
 public:
 	Component(GameObject* gameObject);
 
 	virtual ~Component();
 
 protected:
-	friend class GameObject;
 	virtual void awake() {}
 	virtual void onEnable() {}
 	virtual void start() {}

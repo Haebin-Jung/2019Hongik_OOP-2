@@ -1,7 +1,6 @@
 #include "GameEngine.h"
 #include "GameObject.h"
-#include "Utils.h"
-#include "GridScript.h"
+#include "MoveScript.h"
 
 GameEngine* GameEngine::instance = nullptr;
 
@@ -23,42 +22,40 @@ GameEngine::GameEngine()
 	screen.clear(); screen.render();
 }
 
+// Scene 1개
 void GameEngine::mainLoop() {
 
-	GameObject map("Map");
-	auto &objs = GameObject::gameObjects;
-	const int maxFoods = 10;
+	auto& objs = GameObject::gameObjects;
 
-	map.addComponent<GridScript>();
+	GameObject map("map");
+	objs.push_back(&map);
+	// map의 경우, Stack에 쌓인 지역변수이기 때문에 동적해제를 하는 방식으로 처리할 경우 Error발생 소지가 있음
+	
+	GameObject monster("monster", &map);
+	monster.addComponent<MoveScript>();
+	objs.push_back(&monster);
+	
+	GameObject ghost("ghost", &map);
+	monster.addComponent<MoveScript>();
+	objs.push_back(&ghost);
 
-	GridScript* comp = map.getComponent<GridScript>();
-
-	for (int i = 0; i < maxFoods; i++) {
+	for (int i = 0; i < 20; i++) {
 		string name = "food(" + i;
 		name += ")";
-		GameObject* newObject = new GameObject(name);
-		newObject->addComponent<FoodScript>();
-
-		objs.push_back(new GameObject(name));
+		GameObject *food = new GameObject(name, &map);
+		objs.push_back(food);
 	}
-	GameObject* monster = new GameObject("monster");
-	monster->addComponent<MonsterScript>();
-	GameObject* ghost = new GameObject("ghost");
-	monster->addComponent<GhostScript>();
-
-	objs.push_back(monster);
-	objs.push_back(ghost);
 
 
-	for (auto obj : GameObject::gameObjects)
+	for (auto obj : objs)
 	{
 		obj->traverseStart();
 	}
 
 	while (!Input::GetKeyDown(KeyCode::Esc)) {
-		screen.clear();
+		//screen.clear();
 		// update		
-		for (auto obj : GameObject::gameObjects)
+		for (auto obj : objs)
 		{
 			obj->traverseUpdate();
 		}
@@ -66,7 +63,7 @@ void GameEngine::mainLoop() {
 
 		// draw
 
-		screen.render();
+		//screen.render();
 		Sleep(100);
 
 		Input::EndOfFrame();

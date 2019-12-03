@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <cstdio>
 #include <vector>
 #include <Windows.h>
 
@@ -22,7 +23,7 @@ struct Vector2 {
 	static Vector2 right;
 
 	double magnitude() {
-		return sqrt(this->sqrMagnitude());
+		return sqrt(this->sqrMagnitude() );
 	}
 
 	double sqrMagnitude() {
@@ -51,7 +52,6 @@ struct Vector2 {
 	}
 };
 
-
 enum class KeyCode {
 	Space = 0,
 	Left,
@@ -65,6 +65,13 @@ enum class KeyCode {
 	A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
 };
 
+static vector<WORD> keyCodeTable {
+	VK_SPACE, VK_LEFT, VK_RIGHT, VK_UP, VK_DOWN,
+	VK_ESCAPE, VK_RETURN, 
+	0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x50,
+	0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A
+};
+
 
 class Input {
 	static INPUT_RECORD InputRecord[128];
@@ -73,19 +80,83 @@ class Input {
 	static bool gotMouseEvent;
 	static bool gotKeyEvent;
 	static Vector2 mousePosition;
-	static WORD vKeyCode;	
+	static WORD vKeyCode;
+
+	static void GetEvent()
+	{
+		evaluated = true;
+		DWORD numEvents = 0;
+
+		GetNumberOfConsoleInputEvents(GetStdHandle(STD_INPUT_HANDLE), &numEvents);
+		if (!numEvents) return;
+
+		ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), InputRecord, numEvents, &Events);
+		for (int i = 0; i < numEvents; i++) {
+			if (InputRecord[i].EventType == MOUSE_EVENT) {
+				if (InputRecord[i].Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+					COORD coord;
+					coord.X = InputRecord[i].Event.MouseEvent.dwMousePosition.X;
+					coord.Y = InputRecord[i].Event.MouseEvent.dwMousePosition.Y;
+					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+					mousePosition.x = InputRecord[i].Event.MouseEvent.dwMousePosition.X;
+					mousePosition.y = InputRecord[i].Event.MouseEvent.dwMousePosition.Y;
+					gotMouseEvent = true;
+				}
+			}
+			else if (InputRecord[i].EventType == KEY_EVENT) {
+				if (InputRecord[i].Event.KeyEvent.bKeyDown) {
+					vKeyCode = InputRecord[i].Event.KeyEvent.wVirtualKeyCode;
+					gotKeyEvent = true;
+				}
+			}
+		}
+	}
 
 public:
-	static void GetEvent();
 
-	static void EndOfFrame();
+	static void EndOfFrame()
+	{
+		evaluated = false;
+		gotMouseEvent = false;
+		gotKeyEvent = false;
+	}
 
-	static void Initialize();
-	static bool GetMouseEvent(Vector2& pos);
+	static void Initialize()
+	{
 
-	static bool GetKeyEvent(WORD& keyCode);
+		CONSOLE_CURSOR_INFO cci;
+		cci.dwSize = 25;
+		cci.bVisible = FALSE;
+		SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
+		SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), ENABLE_PROCESSED_INPUT | ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT );
 
-	static bool GetKeyDown(KeyCode key);
+		EndOfFrame();
+	}
+	static bool GetMouseEvent(Vector2& pos) {
+		if (evaluated == false) GetEvent();
+
+		if (gotMouseEvent == true) {
+			pos = mousePosition;
+			return true;
+		}
+		return false;}
+
+	static bool GetKeyEvent(WORD& keyCode) {
+		if (evaluated == false) GetEvent();
+
+		if (gotKeyEvent == true) {
+			keyCode = vKeyCode;
+			return true;
+		}
+		return false;
+	}
+
+	static bool GetKeyDown(KeyCode key) {
+		if (evaluated == false) GetEvent();
+
+		if (gotKeyEvent == true) return keyCodeTable[(int)key] == vKeyCode;		
+		return false;
+	}
 };
 
 
@@ -191,3 +262,4 @@ public:
 		canvas[width + (height - 1)*(width + 1)] = '\0';
 	}
 };
+

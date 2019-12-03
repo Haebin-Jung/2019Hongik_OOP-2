@@ -1,6 +1,5 @@
+#include "Component.h"
 #include "Transform.h"
-
-
 
 Transform::Transform(GameObject* gameObject, 
 	const Vector2& position,
@@ -10,5 +9,9 @@ Transform::Transform(GameObject* gameObject,
 	rotation(rotation), 
 	scale(scale),
 	Component(gameObject)
+{
+}
+
+Transform::~Transform()
 {
 }

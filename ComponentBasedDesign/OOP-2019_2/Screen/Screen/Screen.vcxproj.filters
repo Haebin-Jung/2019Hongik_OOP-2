@@ -36,7 +36,7 @@
     <ClCompile Include="Utils.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GridScript.cpp">
+    <ClCompile Include="MoveScript.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClInclude Include="MyScript.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GridScript.h">
+    <ClInclude Include="MoveScript.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

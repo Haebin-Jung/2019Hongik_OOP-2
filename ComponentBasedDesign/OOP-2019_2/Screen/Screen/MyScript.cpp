@@ -1,4 +1,3 @@
-
 #include "GameObject.h"
 #include "Component.h"
 #include "MyScript.h"

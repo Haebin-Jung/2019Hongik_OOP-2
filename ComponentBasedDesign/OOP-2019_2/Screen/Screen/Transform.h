@@ -15,6 +15,8 @@ public:
 		const Vector2& rotation = Vector2::zero,
 		const Vector2& scale = Vector2::ones);
 
+	~Transform();
+
 protected:
 	void start() {}
 
