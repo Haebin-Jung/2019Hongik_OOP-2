@@ -10,9 +10,11 @@ GameObject* GameObject::Find(const string& path) {
 
 /* General variables and functions */
 
-GameObject::GameObject(const string& name, GameObject* parent, const string& tag)
+GameObject::GameObject(const string& name, 
+	GameObject* parent, const string& tag, 
+	const string& shape, const Vector2& pos)
 	: name(name), tag(tag), enabled(true), parent(parent),
-	transform(new Transform(this) ) {
+	transform(new Transform(this, shape, pos) ) {
 	components.clear();
 	components.push_back(transform);
 }

@@ -12,7 +12,8 @@ struct Vector2 {
 	float y;
 	const int X() const { return (int)x; }
 	const int Y() const { return (int)y; }
-	Vector2(float x = 0, float y = 0) : x(x), y(y) {}
+	Vector2(float x = 0.0f, float y = 0.0f) : x(x), y(y) {}
+	Vector2(int x = 0, int y = 0) : Vector2((float)x, (float)y) {}
 	Vector2(const Vector2& other) : Vector2(other.x, other.y) {}
 
 	static Vector2 zero;

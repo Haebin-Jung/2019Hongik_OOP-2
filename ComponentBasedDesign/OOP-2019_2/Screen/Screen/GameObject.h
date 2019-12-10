@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Utils.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class GameObject
 	Transform* transform;
 
 public:
-	GameObject(const string& name, GameObject* parent = nullptr, const string& tag = "");
+	GameObject(const string& name, GameObject* parent = nullptr, const string& tag = "", const string& shape = "", const Vector2& pos=Vector2::zero);
 
 	~GameObject();
 
