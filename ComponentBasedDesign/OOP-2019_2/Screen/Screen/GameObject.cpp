@@ -5,6 +5,10 @@
 vector<GameObject*> GameObject::gameObjects;
 
 GameObject* GameObject::Find(const string& path) {
+	for (auto obj : gameObjects)
+	{
+		if (obj->getName() == path) return obj;
+	}
 	return nullptr;
 }
 

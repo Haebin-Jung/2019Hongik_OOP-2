@@ -7,10 +7,9 @@ class GameObject;
 class Transform;
 
 class Component {	
-	Transform* transform;
-
 protected:
 	GameObject* gameObject;
+	Transform* transform;
 
 	friend class GameObject;
 

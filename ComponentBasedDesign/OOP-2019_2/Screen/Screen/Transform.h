@@ -23,6 +23,9 @@ public:
 
 	~Transform();
 
+	void setPosition(const Vector2& pos) { position = pos; }
+	Vector2 getPosition() const { return position; }
+
 protected:
 	void start();
 

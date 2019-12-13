@@ -149,6 +149,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MoveScript.cpp" />
     <ClCompile Include="MyScript.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GridManager.h" />
     <ClInclude Include="MoveScript.h" />
     <ClInclude Include="MyScript.h" />
     <ClInclude Include="Transform.h" />
