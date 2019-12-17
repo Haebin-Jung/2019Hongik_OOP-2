@@ -36,6 +36,10 @@ public:
 	Transform* getTransform() { return transform; }
 
 	static GameObject* Find(const string& path);
+	static void Add(GameObject* obj);
+	static void Remove(GameObject* obj);
+
+	static const vector<GameObject*>& GetGameObjects() { return gameObjects; }
 
 	void setParent(GameObject* parent) 
 	{this->parent = parent;}

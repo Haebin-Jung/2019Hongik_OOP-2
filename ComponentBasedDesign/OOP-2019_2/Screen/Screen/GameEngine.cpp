@@ -33,20 +33,20 @@ void GameEngine::mainLoop() {
 	rand();
 
 	GameObject* map = new GameObject("map", nullptr, "map", "", Vector2{ 20, 10 });
-	objs.push_back(map);
+	GameObject::Add(map); //wrapping
 	map->addComponent<GridManager>();
 	auto gm = static_cast<GridManager *> (map->getComponent<GridManager>());
 
 	GameObject* monster = new GameObject("monster", map, "monster", "m", Vector2{ rand()%gm->getWidth(), rand()%gm->getHeight() });
 	monster->addComponent<MoveScript>();
-	objs.push_back(monster);
+	GameObject::Add(monster);
 	
 	GameObject* ghost = new GameObject("ghost", map, "ghost", "g", Vector2{ rand() % gm->getWidth(), rand() % gm->getHeight() });
 	ghost->addComponent<MoveScript>();
-	objs.push_back(ghost);
+	GameObject::Add(ghost);
 
-	for (int i = 0; i < 10; i++) {
-		string name = "food(" + i;
+	for (int i = 0; i < 20; i++) {
+		string name = "food(" + to_string(i);
 		name += ")";
 		GameObject *food = new GameObject(name, map, "food", "#", Vector2{ rand() % gm->getWidth(), rand() % gm->getHeight() });
 		objs.push_back(food);

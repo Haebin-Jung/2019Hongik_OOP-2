@@ -36,5 +36,6 @@ void MoveScript::update()
 	case 4: pos += Vector2{ 0,-1 };	break;
 	}
 	gm->resideInside(pos);
+	gm->removeVictims(*gameObject);
 	transform->setPosition(pos);
 }
