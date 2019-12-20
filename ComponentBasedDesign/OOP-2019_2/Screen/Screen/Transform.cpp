@@ -8,10 +8,10 @@ Transform::Transform(GameObject* gameObject,
 	const Vector2& position,
 	const Vector2& rotation,
 	const Vector2& scale)
-	: position(position), 
+	: shape(shape),
+	position(position), 
 	rotation(rotation), 
 	scale(scale),
-	shape(shape),
 	Component(gameObject),
 	screen(Screen::getInstance())
 {

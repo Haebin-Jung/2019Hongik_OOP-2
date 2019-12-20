@@ -36,9 +36,7 @@ void GameObject::Remove(GameObject* obj) {
 	//gameObjects.erase(std::remove_if(
 	//	gameObjects.begin(),	//처음부터
 	//	gameObjects.end(),		//끝까지
-	//	[&](GameObject* item) { return obj == item; } //특정 조건이 true가 되는 상황에 대하여 람다function?
-	//	// []어떻게 전달할건지 = copy by value/ & call by reference, 여러개의 정보일 경우 ', 형식 변수명'으로 전달
-	//	// {}조건이 만족하는 것에 대하여 수행한다. 위의 for문에서의 if문에 해당하는 내용.
+	//	[&](GameObject* item) { return obj == item; }
 	//), gameObjects.end()); //end는 마지막 element 다음인 끝을 의미한다.
 }
 
