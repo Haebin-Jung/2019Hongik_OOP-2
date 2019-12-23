@@ -32,12 +32,14 @@ public:
 	void traverseUpdate();
 
 	string getName() const { return name; }
+	string getTag() const { return tag; }
 
 	Transform* getTransform() { return transform; }
 
 	static GameObject* Find(const string& path);
 	static void Add(GameObject* obj);
 	static void Remove(GameObject* obj);
+	static void Insert(GameObject* obj);
 
 	static const vector<GameObject*>& GetGameObjects() { return gameObjects; }
 

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "MoveScript.h"
 #include "GridManager.h"
+#include "BlockScript.h"
 #include <ctime>
 
 GameEngine* GameEngine::instance = nullptr;
@@ -27,30 +28,28 @@ GameEngine::GameEngine()
 // Scene 1개
 void GameEngine::mainLoop() {
 
-	auto& objs = GameObject::gameObjects;
+	auto& objs = GameObject::gameObjects; //gameObjects라는 벡터에 저장된 GameObject들의 포인터객체
 
-	//srand(time(nullptr));
-	rand();
+	srand(time(nullptr));
 
-	GameObject* map = new GameObject("map", nullptr, "map", "", Vector2{ 20, 10 });
-	GameObject::Add(map); //wrapping
+	// 테트리스 맵 생성
+	GameObject* map = new GameObject("map", nullptr, "map", "", Vector2{ 1, 1 });
 	map->addComponent<GridManager>();
-	auto gm = static_cast<GridManager *> (map->getComponent<GridManager>());
 
-	GameObject* monster = new GameObject("monster", map, "monster", "m", Vector2{ rand()%gm->getWidth(), rand()%gm->getHeight() });
-	monster->addComponent<MoveScript>();
-	GameObject::Add(monster);
+	// 다음블록 화면 생성
+	GameObject* next = new GameObject("next", nullptr, "next", "", Vector2{ 15, 1 });
+	next->addComponent<GridManager>();
+	auto gm = static_cast<GridManager *> (next->getComponent<GridManager>());
+	gm->resizeGrid(10, 4);
+
+	int nblocks = 0;
+	GameObject* block = new GameObject("block", map, "block", "\xB2", Vector2{ gm->getWidth() / 2, 1 });
+	block->addComponent<BlockScript>();
+	block->addComponent<MoveScript>();
+	GameObject::Add(block);
 	
-	GameObject* ghost = new GameObject("ghost", map, "ghost", "g", Vector2{ rand() % gm->getWidth(), rand() % gm->getHeight() });
-	ghost->addComponent<MoveScript>();
-	GameObject::Add(ghost);
-
-	for (int i = 0; i < 20; i++) {
-		string name = "food(" + to_string(i);
-		name += ")";
-		GameObject *food = new GameObject(name, map, "food", "#", Vector2{ rand() % gm->getWidth(), rand() % gm->getHeight() });
-		objs.push_back(food);
-	}
+	GameObject::Add(next);
+	GameObject::Add(map);
 
 
 	for (auto obj : objs)
@@ -60,7 +59,29 @@ void GameEngine::mainLoop() {
 
 	while (!Input::GetKeyDown(KeyCode::Esc)) {
 		screen.clear();
-		// update		
+		// update	
+		nblocks = 0;
+
+		// 활성된 블록 객체 확인
+		for (auto obj : objs) {
+			BlockScript* bs = static_cast<BlockScript*> (obj->getComponent<BlockScript>());
+			if (bs == nullptr) continue;
+			if (obj->getTag() == "block" && bs->canMove()) {
+				nblocks++;
+				break;
+			}
+		}
+
+		// 활성된 블록이 없으면 새 블록 생성
+		if (nblocks == 0) {
+			GameObject* block = new GameObject("block", map, "block", "\xB2", Vector2{ gm->getWidth() / 2, 1 });
+			block->addComponent<BlockScript>();
+			block->addComponent<MoveScript>();
+			GameObject::Insert(block);
+			block->traverseStart();
+		}
+
+
 		for (auto obj : objs)
 		{
 			obj->traverseUpdate();
@@ -70,7 +91,7 @@ void GameEngine::mainLoop() {
 		// draw
 
 		screen.render();
-		Sleep(100);
+		Sleep(300);
 
 		Input::EndOfFrame();
 	}

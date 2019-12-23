@@ -199,7 +199,7 @@ class Screen {
 	char* canvas;
 
 	static Screen* instance;
-	Screen(int width = 90, int height = 50)
+	Screen(int width =90, int height = 35)
 		: width(width), height(height),
 		canvas(new char[(width + 1)*height])
 
@@ -246,6 +246,11 @@ public:
 		{
 			strncpy(&canvas[pos.X() + (pos.Y() + i)*(width + 1)], &shape[i*w], w);
 		}
+	}
+
+	char getScreenInfo(const Vector2 pos) {
+		// if (pos.X() < 0 || pos.Y() < 0 || pos.X() > width + 1 || pos.Y() > height) return NULL;
+		return canvas[pos.X() + pos.Y()*(width + 1)];
 	}
 
 	void render()

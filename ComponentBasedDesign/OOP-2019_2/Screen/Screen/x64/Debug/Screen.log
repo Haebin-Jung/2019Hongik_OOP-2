@@ -1,8 +1,0 @@
-﻿  GameEngine.cpp
-c:\users\b407_11\documents\github\2019hongik_oop-2\componentbaseddesign\oop-2019_2\screen\screen\utils.h(95): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  GridManager.cpp
-c:\users\b407_11\documents\github\2019hongik_oop-2\componentbaseddesign\oop-2019_2\screen\screen\utils.h(95): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-c:\users\b407_11\documents\github\2019hongik_oop-2\componentbaseddesign\oop-2019_2\screen\screen\gridmanager.cpp(32): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\b407_11\documents\github\2019hongik_oop-2\componentbaseddesign\oop-2019_2\screen\screen\gridmanager.cpp(34): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  Screen.vcxproj -> C:\Users\B407_11\Documents\GitHub\2019Hongik_OOP-2\ComponentBasedDesign\OOP-2019_2\Screen\x64\Debug\Screen.exe

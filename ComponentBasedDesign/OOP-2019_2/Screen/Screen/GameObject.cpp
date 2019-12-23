@@ -18,6 +18,14 @@ void GameObject::Add(GameObject* obj) {
 	gameObjects.push_back(obj);
 }
 
+void GameObject::Insert(GameObject* obj) {
+	if (obj == nullptr) return;
+
+	vector<GameObject*>::iterator it = gameObjects.begin();
+	gameObjects.insert(it,obj);
+	return;
+}
+
 void GameObject::Remove(GameObject* obj) {
 	//using iterator
 	if (obj == nullptr) return;

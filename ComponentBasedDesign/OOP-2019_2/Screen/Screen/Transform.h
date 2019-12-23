@@ -26,6 +26,8 @@ public:
 	void setPosition(const Vector2& pos) { position = pos; }
 	Vector2 getPosition() const { return position; }
 
+	string& getShape(GameObject* obj);
+
 protected:
 	void start();
 
